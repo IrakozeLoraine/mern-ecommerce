@@ -1,0 +1,53 @@
+[
+  {
+    "name": "Huawei USB 16GB",
+    "price": "7.00",
+    "description": "This is a very well performing storage device in all colors. High performance, portability and virus-free",
+    "ratings": 2,
+    "images": [
+      {
+        "public_id": "id",
+        "url": "localhost"
+      }
+    ],
+    "category": "ELECTRONICS",
+    "seller": "Ebay",
+    "stock": 20,
+    "numOfReviews": 5,
+    "reviews": []
+  },
+  {
+    "name": "SanDisk USB 16GB",
+    "price": 10,
+    "description": "This is a very well performing storage device in all colors. High performance, portability and virus-free",
+    "ratings": 4.5,
+    "images": [
+      {
+        "public_id": "id",
+        "url": "localhost"
+      }
+    ],
+    "category": "ELECTRONICS",
+    "seller": "Ebay",
+    "stock": 20,
+    "numReviews": 0,
+    "reviews": []
+  },
+  {
+    "name": "SanDisk USB 32GB",
+    "price": 18,
+    "description": "This is a very well performing storage device in all colors. High performance, portability and virus-free",
+    "ratings": 5,
+    "images": [
+      {
+        "public_id": "id",
+        "url": "localhost"
+      }
+    ],
+    "category": "ELECTRONICS",
+    "seller": "Ebay",
+    "stock": 30,
+    "numReviews": 0,
+    "reviews": []
+  }
+]
