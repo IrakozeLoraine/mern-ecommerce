@@ -67,6 +67,31 @@ exports.currentUser = catchAsyncErrors(async (req, res, next) => {
   });
 });
 
+exports.updateProfile = catchAsyncErrors(async (req, res, next) => {
+  const { name, email, phone, address } = req.body;
+
+  const user = await User.findByIdAndUpdate(
+    req.user.id,
+    {
+      name,
+      email,
+      phone,
+      address,
+    },
+    {
+      new: true,
+      runValidators: true,
+      useFindAndModify: false,
+    }
+  );
+
+  res.status(200).json({
+    success: true,
+    data: user,
+    message: 'Profile successfully updated',
+  });
+});
+
 exports.changePassword = catchAsyncErrors(async (req, res, next) => {
   const user = await User.findById(req.user.id).select('+password');
 
