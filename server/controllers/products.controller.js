@@ -1,7 +1,8 @@
 const Product = require('../models/Product');
 const ErrorHandler = require('../utils/errorHandler');
+const catchAsyncErrors = require('../middlewares/catchAsyncErrors');
 
-exports.newProduct = async (req, res, next) => {
+exports.newProduct = catchAsyncErrors(async (req, res, next) => {
   const product = await Product.create(req.body);
 
   res.status(201).json({
@@ -9,9 +10,9 @@ exports.newProduct = async (req, res, next) => {
     data: product,
     message: 'Product successfully added',
   });
-};
+});
 
-exports.updateProduct = async (req, res, next) => {
+exports.updateProduct = catchAsyncErrors(async (req, res, next) => {
   let product = await Product.findById(req.params.id);
 
   if (!product) {
@@ -29,18 +30,18 @@ exports.updateProduct = async (req, res, next) => {
     data: product,
     message: 'Product successfully updated',
   });
-};
+});
 
-exports.getProducts = async (req, res, next) => {
+exports.getProducts = catchAsyncErrors(async (req, res, next) => {
   const products = await Product.find({});
   res.status(200).json({
     success: true,
     data: products,
     count: products.length,
   });
-};
+});
 
-exports.getProductById = async (req, res, next) => {
+exports.getProductById = catchAsyncErrors(async (req, res, next) => {
   const product = await Product.findById(req.params.id);
   if (!product) {
     return next(new ErrorHandler('Product not found', 404));
@@ -50,9 +51,9 @@ exports.getProductById = async (req, res, next) => {
     success: true,
     data: product,
   });
-};
+});
 
-exports.deleteProduct = async (req, res, next) => {
+exports.deleteProduct = catchAsyncErrors(async (req, res, next) => {
   const product = await Product.findById(req.params.id);
 
   if (!product) {
@@ -65,4 +66,4 @@ exports.deleteProduct = async (req, res, next) => {
     success: true,
     message: 'Product is successfully deleted',
   });
-};
+});
