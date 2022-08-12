@@ -34,15 +34,20 @@ exports.updateProduct = catchAsyncErrors(async (req, res, next) => {
 });
 
 exports.getProducts = catchAsyncErrors(async (req, res, next) => {
+  const resPerPage = 2;
+  const totalCount = await Product.countDocuments();
+
   const apiFeatures = new APIFeatures(Product.find(), req.query)
     .search()
-    .filter();
+    .filter()
+    .pagination(resPerPage);
 
   const products = await apiFeatures.query;
   res.status(200).json({
     success: true,
     data: products,
     count: products.length,
+    totalCount,
   });
 });
 
