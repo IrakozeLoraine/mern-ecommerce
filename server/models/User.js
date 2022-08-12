@@ -13,10 +13,20 @@ const userSchema = new mongoose.Schema({
     unique: true,
     validate: [validator.isEmail, 'Please enter valid email address'],
   },
+  phone: {
+    type: String,
+    required: [true, 'Please enter your phone number'],
+    length: [10, 'Phone number must be 10 digits'],
+  },
+  address: {
+    type: String,
+    required: [true, 'Please enter your delivery address'],
+  },
   password: {
     type: String,
     required: [true, 'Please enter your password'],
     minLength: [8, 'Your password must be at least 8 characters'],
+    select: false,
   },
   avatar: {
     public_id: {
@@ -42,3 +52,27 @@ const userSchema = new mongoose.Schema({
   resetPasswordToken: String,
   resetPasswordExpire: Date,
 });
+
+//compare user password
+// userSchema.methods.comparePassword = async function (enteredPassword) {
+//   return await bcrypt.compare(enteredPassword, this.password);
+// };
+
+//encrypting password
+
+// userSchema.pre('save', async function (next) {
+//   if (!this.isModified('password')) {
+//     next();
+//   }
+//   this.password = await bcrypt.hash(this.password, 10);
+// });
+
+//return JWT token
+
+// userSchema.methods.getJwtToken = function () {
+//   return jwt.sign({ id: this._id }, process.env.JWT_SECRET, {
+//     expiresIn: process.env.JWT_EXPIRES_TIME,
+//   });
+// };
+
+module.exports = mongoose.model('User', userSchema);
