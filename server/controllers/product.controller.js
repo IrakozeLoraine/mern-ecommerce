@@ -4,6 +4,8 @@ const catchAsyncErrors = require('../middlewares/catchAsyncErrors');
 const APIFeatures = require('../utils/apiFeatures');
 
 exports.newProduct = catchAsyncErrors(async (req, res, next) => {
+  req.body.user = req.user.id;
+
   const product = await Product.create(req.body);
 
   res.status(201).json({
@@ -37,7 +39,10 @@ exports.getProducts = catchAsyncErrors(async (req, res, next) => {
   const resPerPage = 2;
   const totalCount = await Product.countDocuments();
 
-  const apiFeatures = new APIFeatures(Product.find(), req.query)
+  const apiFeatures = new APIFeatures(
+    Product.find().populate('user'),
+    req.query
+  )
     .search()
     .filter()
     .pagination(resPerPage);
@@ -52,7 +57,7 @@ exports.getProducts = catchAsyncErrors(async (req, res, next) => {
 });
 
 exports.getProductById = catchAsyncErrors(async (req, res, next) => {
-  const product = await Product.findById(req.params.id);
+  const product = await Product.findById(req.params.id).populate('user');
   if (!product) {
     return next(new ErrorHandler('Product not found', 404));
   }
