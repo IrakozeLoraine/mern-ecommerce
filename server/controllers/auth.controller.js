@@ -57,3 +57,33 @@ exports.logoutUser = catchAsyncErrors(async (req, res, next) => {
     message: 'Logged out successfully',
   });
 });
+
+exports.currentUser = catchAsyncErrors(async (req, res, next) => {
+  const user = await User.findById(req.user.id);
+
+  res.status(200).json({
+    success: true,
+    data: user,
+  });
+});
+
+exports.changePassword = catchAsyncErrors(async (req, res, next) => {
+  const user = await User.findById(req.user.id).select('+password');
+
+  const isPasswordMatched = await bcrypt.compare(
+    req.body.oldPassword,
+    user.password
+  );
+
+  if (!isPasswordMatched) {
+    return next(new ErrorHandler('Old password is incorrect', 400));
+  }
+
+  user.password = await bcrypt.hash(req.body.password, 10);
+
+  await user.save();
+
+  let newUser = { ...user._doc };
+  delete newUser.password;
+  sendToken(newUser, 200, 'Password updated successfully', res);
+});
