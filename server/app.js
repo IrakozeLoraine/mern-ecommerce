@@ -5,6 +5,7 @@ const cookieParser = require('cookie-parser');
 
 const ErrorMiddleware = require('./middlewares/errors');
 const productRoutes = require('./routes/products.routes');
+const orderRoutes = require('./routes/order.routes');
 const authRoutes = require('./routes/auth.routes');
 const adminRoutes = require('./routes/admin.routes');
 const { isAuthenticatedUser, authorizeRoles } = require('./middlewares/auth');
@@ -14,6 +15,7 @@ app.use(cookieParser());
 
 app.use('/api/v1/auth', authRoutes);
 app.use('/api/v1/products', productRoutes);
+app.use('/api/v1/orders', isAuthenticatedUser, orderRoutes);
 app.use(
   '/api/v1/admin',
   isAuthenticatedUser,

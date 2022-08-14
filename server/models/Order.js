@@ -13,6 +13,8 @@ const orderSchema = mongoose.Schema({
     phone: {
       type: String,
       required: true,
+      minLength: [10, 'Phone number must be at least 10 digits'],
+      maxLength: [12, 'Phone numnber can not exceed 12 digits'],
     },
     postalCode: {
       type: String,
