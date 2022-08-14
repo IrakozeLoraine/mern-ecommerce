@@ -36,7 +36,7 @@ exports.updateProduct = catchAsyncErrors(async (req, res, next) => {
 });
 
 exports.getProducts = catchAsyncErrors(async (req, res, next) => {
-  const resPerPage = 2;
+  const resPerPage = req.query.rowsPerPage;
   const totalCount = await Product.countDocuments();
 
   const apiFeatures = new APIFeatures(
@@ -80,5 +80,46 @@ exports.deleteProduct = catchAsyncErrors(async (req, res, next) => {
   res.status(200).json({
     success: true,
     message: 'Product is successfully deleted',
+  });
+});
+
+exports.createProductReview = catchAsyncErrors(async (req, res, next) => {
+  const { rating, comment, productId } = req.body;
+
+  const review = {
+    user: req.user.id,
+    name: req.user.name,
+    rating: Number(rating),
+    comment,
+  };
+
+  const product = await Product.findById(productId);
+
+  const isReviewed = product.reviews.find(
+    (rev) => rev.user.toString() === req.user.id.toString()
+  );
+
+  if (isReviewed) {
+    product.reviews.forEach((rev) => {
+      if (rev.user.toString() === req.user.id.toString()) {
+        rev.comment = comment;
+        rev.rating = rating;
+      }
+    });
+  } else {
+    product.reviews.push(review);
+    product.numReviews = product.reviews.length;
+  }
+
+  product.ratings =
+    product.reviews.reduce((acc, value) => value.rating + acc, 0) /
+    product.reviews.length;
+
+  await product.save({ validateBeforeSave: false });
+
+  res.status(200).json({
+    success: false,
+    data: product,
+    message: 'Review has been recorded',
   });
 });
