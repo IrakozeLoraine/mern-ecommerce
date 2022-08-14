@@ -123,3 +123,14 @@ exports.createProductReview = catchAsyncErrors(async (req, res, next) => {
     message: 'Review has been recorded',
   });
 });
+
+exports.getProductReviews = catchAsyncErrors(async (req, res, next) => {
+  const product = await Product.findById(req.query.id);
+  if (!product) {
+    return next(new ErrorHandler('Product not found', 404));
+  }
+  res.status(200).json({
+    success: true,
+    data: product.reviews,
+  });
+});
